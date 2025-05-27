@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ashutosh English PDF System - Black & Blue Neon Theme with Toggleable Admin Password Reset</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: #000000;
+    color: #00e0ff;
+    min-height: 100vh;
+    padding: 30px 15px;
+    display: flex;
+    justify-content: center;
+  }
+  .container {
+    max-width: 900px;
+    width: 100%;
+  }
+  h1 {
+    text-align: center;
+    font-weight: 700;
+    color: #00e0ff;
+    margin-bottom: 30px;
+    font-size: 2.8rem;
+    text-shadow: 0 0 15px #00e0ff;
+  }
+  button {
+    background: #00e0ff;
+    border: none;
+    border-radius: 6px;
+    color: #000000;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 10px 20px;
+    transition: background 0.3s ease, color 0.3s ease;
+    box-shadow: 0 0 15px #00e0ff;
+    user-select: none;
+    margin: 10px 0 10px 0;
+  }
+  button:hover {
+    background: #00b9cc;
+    color: #fff;
+    box-shadow: 0 0 30px #00b9cc;
+  }
+  button.remove-btn {
+    background: #005f7f;
+    box-shadow: 0 0 15px #005f7f;
+    margin-left: 8px;
+    color: #fff;
+    font-weight: 700;
+  }
+  button.remove-btn:hover {
+    background: #009fc6;
+    color: #000000;
+    box-shadow: 0 0 30px #009fc6;
+  }
+  section {
+    background: #0a0a0a;
+    border-radius: 12px;
+    padding: 25px 30px;
+    box-shadow: 0 0 20px #00e0ff;
+    margin-bottom: 35px;
+  }
+  section h2, section h3 {
+    font-weight: 600;
+    color: #00e0ff;
+    text-shadow: 0 0 10px #00b9cc;
+  }
+  section h2 {
+    font-size: 1.8rem;
+    border-bottom: 3px solid #00e0ff;
+    padding-bottom: 6px;
+    margin-bottom: 25px;
+  }
+  section h3 {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+  .subsection {
+    background: #111111;
+    border-radius: 10px;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    box-shadow: inset 0 0 10px #00e0ff;
+  }
+  .subsection-name {
+    font-weight: 600;
+    font-size: 1.3rem;
+    color: #00e0ff;
+    margin-bottom: 12px;
+    text-shadow: 0 0 8px #00b9cc;
+  }
+  .pdf-list {
+    border-top: 1px solid #00e0ff;
+    padding-top: 10px;
+    max-height: 180px;
+    overflow-y: auto;
+  }
+  .pdf-list-item {
+    display: flex;
+    justify-content: flex-start;
+    background: #000000;
+    padding: 8px 12px;
+    border-radius: 7px;
+    margin-bottom: 10px;
+    box-shadow: 0 0 12px #00e0ff;
+    font-size: 1rem;
+    align-items: center;
+    gap: 12px;
+  }
+  .pdf-list-item:last-child {
+    margin-bottom: 0;
+  }
+  .pdf-name {
+    word-break: break-all;
+    color: #00e0ff;
+    flex-grow: 1;
+    text-shadow: 0 0 10px #00b9cc;
+  }
+  footer {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #00b9cc;
+    margin-top: 20px;
+    text-shadow: 0 0 8px #00b9cc;
+  }
+  @media (max-width: 600px) {
+    .subsection {
+      padding: 12px 15px;
+    }
+    .pdf-list {
+      max-height: 140px;
+    }
+  }
+  nav {
+    background: #000000;
+    padding: 15px 20px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    box-shadow: 0 0 25px #00e0ff;
+  }
+  nav a {
+    color: #00e0ff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-decoration: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: background-color 0.3s;
+    text-shadow: 0 0 10px #00b9cc;
+  }
+  nav a:hover, nav a.active {
+    background-color: #00b9cc;
+    color: #000000;
+    text-shadow: none;
+  }
+  #admin-password-prompt {
+    margin-bottom: 20px;
+  }
+  #admin-password-input {
+    padding: 8px 12px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1.8px solid #00b9cc;
+    font-family: 'Poppins', sans-serif;
+    width: 220px;
+    margin-right: 10px;
+    background: #000000;
+    color: #00e0ff;
+    text-shadow: 0 0 10px #00b9cc;
+  }
+  #admin-password-input::placeholder {
+    color: #339eff88;
+  }
+  #admin-password-error {
+    color: #ff004d;
+    margin-top: 6px;
+    font-weight: 700;
+    min-height: 20px;
+    text-shadow: 0 0 10px #ff004d;
+  }
+  #reset-password-section {
+    background: #111111;
+    border-radius: 12px;
+    padding: 20px 25px;
+    margin-bottom: 30px;
+    box-shadow: 0 0 20px #00e0ff;
+    display: none;
+  }
+  #reset-password-section.active {
+    display: block;
+  }
+  #reset-password-section h3 {
+    color: #00e0ff;
+    margin-bottom: 15px;
+    font-weight: 700;
+    text-shadow: 0 0 10px #00b9cc;
+  }
+  #reset-password-section input {
+    display: block;
+    margin-bottom: 10px;
+    padding: 8px 12px;
+    font-size: 1rem;
+    border-radius: 6px;
+    border: 1.8px solid #00b9cc;
+    font-family: 'Poppins', sans-serif;
+    width: 100%;
+    max-width: 300px;
+    background: #000000;
+    color: #00e0ff;
+    text-shadow: 0 0 10px #00b9cc;
+  }
+  #reset-password-section input::placeholder {
+    color: #339eff88;
+  }
+  #reset-password-error, #reset-password-success {
+    font-weight: 700;
+    min-height: 20px;
+  }
+  #reset-password-error {
+    color: #ff004d;
+    text-shadow: 0 0 10px #ff004d;
+  }
+  #reset-password-success {
+    color: #00ff9c;
+    text-shadow: 0 0 10px #00ffa0;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Ashutosh English PDF System</h1>
+  <nav>
+    <a href="#user-section" id="nav-user" class="active">User Section</a>
+    <a href="#admin-section" id="nav-admin">Admin Section</a>
+  </nav>
+
+  <!-- User Section -->
+  <div id="user-section">
+    <!-- Class 12 -->
+    <section id="class-12-user">
+      <h2>Class 12</h2>
+      <div class="subsection" data-class="12" data-section="vistas">
+        <div class="subsection-name">Vistas</div>
+        <div class="pdf-list" id="list-12-vistas"></div>
+      </div>
+      <div class="subsection" data-class="12" data-section="flamingo">
+        <div class="subsection-name">Flamingo</div>
+        <div class="pdf-list" id="list-12-flamingo"></div>
+      </div>
+    </section>
+
+    <!-- Class 11 -->
+    <section id="class-11-user">
+      <h2>Class 11</h2>
+      <div class="subsection" data-class="11" data-section="hornbill">
+        <div class="subsection-name">Hornbill</div>
+        <div class="pdf-list" id="list-11-hornbill"></div>
+      </div>
+      <div class="subsection" data-class="11" data-section="snapshot">
+        <div class="subsection-name">Snapshot</div>
+        <div class="pdf-list" id="list-11-snapshot"></div>
+      </div>
+    </section>
+
+    <!-- Class 10 -->
+    <section id="class-10-user">
+      <h2>Class 10</h2>
+      <div class="subsection" data-class="10" data-section="first-flight">
+        <div class="subsection-name">First Flight</div>
+        <div class="pdf-list" id="list-10-first-flight"></div>
+      </div>
+      <div class="subsection" data-class="10" data-section="footprint-without-print">
+        <div class="subsection-name">Footprint Without Print</div>
+        <div class="pdf-list" id="list-10-footprint-without-print"></div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Admin Section -->
+  <div id="admin-section" style="display:none;">
+    <section id="admin-password-prompt">
+      <input type="password" id="admin-password-input" placeholder="Enter Admin Password" autocomplete="current-password" />
+      <button id="admin-password-submit">Login</button>
+      <div id="admin-password-error"></div>
+    </section>
+
+    <button id="toggle-reset-password-btn" style="margin-bottom:15px;">Reset Admin Password</button>
+    
+    <section id="reset-password-section">
+      <h3>Reset Admin Password</h3>
+      <input type="password" id="old-password" placeholder="Old Password" autocomplete="current-password" />
+      <input type="password" id="new-password" placeholder="New Password" autocomplete="new-password" />
+      <input type="password" id="confirm-password" placeholder="Confirm New Password" autocomplete="new-password" />
+      <button id="save-password-btn">Save Password</button>
+      <div id="reset-password-error"></div>
+      <div id="reset-password-success"></div>
+    </section>
+
+    <section id="class-12-admin" style="display:none;">
+      <h2>Class 12 - Admin Upload</h2>
+      <div class="subsection" data-class="12" data-section="vistas">
+        <div class="subsection-name">Vistas</div>
+        <div class="upload-area">
+          <input type="file" accept="application/pdf" id="upload-12-vistas" multiple style="display:none;"/>
+          <button class="upload-btn" data-for="upload-12-vistas">Upload PDF</button>
+        </div>
+        <div class="pdf-list" id="list-admin-12-vistas"></div>
+      </div>
+      <div class="subsection" data-class="12" data-section="flamingo">
+        <div class="subsection-name">Flamingo</div>
+        <div class="upload-area">
+          <input type="file" accept="application/pdf" id="upload-12-flamingo" multiple style="display:none;"/>
+          <button class="upload-btn" data-for="upload-12-flamingo">Upload PDF</button>
+        </div>
+        <div class="pdf-list" id="list-admin-12-flamingo"></div>
+      </div>
+    </section>
+
+    <section id="class-11-admin" style="display:none;">
+      <h2>Class 11 - Admin Upload</h2>
+      <div class="subsection" data-class="11" data-section="hornbill">
+        <div class="subsection-name">Hornbill</div>
+        <div class="upload-area">
+          <input type="file" accept="application/pdf" id="upload-11-hornbill" multiple style="display:none;"/>
+          <button class="upload-btn" data-for="upload-11-hornbill">Upload PDF</button>
+        </div>
+        <div class="pdf-list" id="list-admin-11-hornbill"></div>
+      </div>
+      <div class="subsection" data-class="11" data-section="snapshot">
+        <div class="subsection-name">Snapshot</div>
+        <div class="upload-area">
+          <input type="file" accept="application/pdf" id="upload-11-snapshot" multiple style="display:none;"/>
+          <button class="upload-btn" data-for="upload-11-snapshot">Upload PDF</button>
+        </div>
+        <div class="pdf-list" id="list-admin-11-snapshot"></div>
+      </div>
+    </section>
+
+    <section id="class-10-admin" style="display:none;">
+      <h2>Class 10 - Admin Upload</h2>
+      <div class="subsection" data-class="10" data-section="first-flight">
+        <div class="subsection-name">First Flight</div>
+        <div class="upload-area">
+          <input type="file" accept="application/pdf" id="upload-10-first-flight" multiple style="display:none;"/>
+          <button class="upload-btn" data-for="upload-10-first-flight">Upload PDF</button>
+        </div>
+        <div class="pdf-list" id="list-admin-10-first-flight"></div>
+      </div>
+      <div class="subsection" data-class="10" data-section="footprint-without-print">
+        <div class="subsection-name">Footprint Without Print</div>
+        <div class="upload-area">
+          <input type="file" accept="application/pdf" id="upload-10-footprint-without-print" multiple style="display:none;"/>
+          <button class="upload-btn" data-for="upload-10-footprint-without-print">Upload PDF</button>
+        </div>
+        <div class="pdf-list" id="list-admin-10-footprint-without-feet"></div>
+      </div>
+    </section>
+  </div>
+
+  <footer>
+    &copy; 2024 Ashutosh English PDF System
+  </footer>
+</div>
+
+<script>
+  const DEFAULT_ADMIN_PASSWORD = '01309095120';
+  const ADMIN_PASSWORD_KEY = 'ashutosh-admin-password';
+
+  const navUser = document.getElementById('nav-user');
+  const navAdmin = document.getElementById('nav-admin');
+  const userSection = document.getElementById('user-section');
+  const adminSection = document.getElementById('admin-section');
+  const adminPasswordInput = document.getElementById('admin-password-input');
+  const adminPasswordSubmit = document.getElementById('admin-password-submit');
+  const adminPasswordError = document.getElementById('admin-password-error');
+
+  const resetPasswordSection = document.getElementById('reset-password-section');
+  const toggleResetBtn = document.getElementById('toggle-reset-password-btn');
+  const oldPasswordInput = document.getElementById('old-password');
+  const newPasswordInput = document.getElementById('new-password');
+  const confirmPasswordInput = document.getElementById('confirm-password');
+  const savePasswordBtn = document.getElementById('save-password-btn');
+  const resetPasswordError = document.getElementById('reset-password-error');
+  const resetPasswordSuccess = document.getElementById('reset-password-success');
+
+  const adminClassSections = {
+    '12': document.getElementById('class-12-admin'),
+    '11': document.getElementById('class-11-admin'),
+    '10': document.getElementById('class-10-admin'),
+  };
+
+  function getStoredAdminPassword() {
+    return localStorage.getItem(ADMIN_PASSWORD_KEY) || DEFAULT_ADMIN_PASSWORD;
+  }
+
+  function setStoredAdminPassword(newPassword) {
+    localStorage.setItem(ADMIN_PASSWORD_KEY, newPassword);
+  }
+
+  navUser.addEventListener('click', e => {
+    e.preventDefault();
+    showUserSection();
+  });
+
+  navAdmin.addEventListener('click', e => {
+    e.preventDefault();
+    resetPasswordError.textContent = '';
+    resetPasswordSuccess.textContent = '';
+    adminPasswordInput.value = '';
+    adminPasswordError.textContent = '';
+    for (const k in adminClassSections) {
+      adminClassSections[k].style.display = 'none';
+    }
+    resetPasswordSection.style.display = 'none';
+    toggleResetBtn.style.display = 'none';
+    adminPasswordInput.style.display = 'inline-block';
+    adminPasswordSubmit.style.display = 'inline-block';
+    adminSection.style.display = 'block';
+    userSection.style.display = 'none';
+    navUser.classList.remove('active');
+    navAdmin.classList.add('active');
+    adminPasswordInput.focus();
+  });
+
+  adminPasswordSubmit.addEventListener('click', () => {
+    if (adminPasswordInput.value.trim() === getStoredAdminPassword()) {
+      adminPasswordError.textContent = '';
+      adminPasswordInput.style.display = 'none';
+      adminPasswordSubmit.style.display = 'none';
+      toggleResetBtn.style.display = 'inline-block';
+      for (const k in adminClassSections) {
+        adminClassSections[k].style.display = 'block';
+      }
+      initializeAdminUploads();
+    } else {
+      adminPasswordError.textContent = 'Incorrect password. Please try again.';
+      adminPasswordInput.focus();
+    }
+  });
+
+  adminPasswordInput.addEventListener('keyup', e => {
+    if (e.key === 'Enter') {
+      adminPasswordSubmit.click();
+    }
+  });
+
+  toggleResetBtn.addEventListener('click', () => {
+    if (resetPasswordSection.style.display === 'block') {
+      resetPasswordSection.style.display = 'none';
+      resetPasswordError.textContent = '';
+      resetPasswordSuccess.textContent = '';
+      oldPasswordInput.value = '';
+      newPasswordInput.value = '';
+      confirmPasswordInput.value = '';
+    } else {
+      resetPasswordSection.style.display = 'block';
+      resetPasswordError.textContent = '';
+      resetPasswordSuccess.textContent = '';
+    }
+  });
+
+  savePasswordBtn.addEventListener('click', () => {
+    resetPasswordError.textContent = '';
+    resetPasswordSuccess.textContent = '';
+    const oldPass = oldPasswordInput.value.trim();
+    const newPass = newPasswordInput.value.trim();
+    const confirmPass = confirmPasswordInput.value.trim();
+
+    if (!oldPass || !newPass || !confirmPass) {
+      resetPasswordError.textContent = 'All fields are required.';
+      return;
+    }
+    if (oldPass !== getStoredAdminPassword()) {
+      resetPasswordError.textContent = 'Old password is incorrect.';
+      return;
+    }
+    if (newPass.length < 6) {
+      resetPasswordError.textContent = 'New password must be at least 6 characters.';
+      return;
+    }
+    if (newPass !== confirmPass) {
+      resetPasswordError.textContent = 'New password and confirm password do not match.';
+      return;
+    }
+
+    setStoredAdminPassword(newPass);
+    resetPasswordSuccess.textContent = 'Password changed successfully!';
+    oldPasswordInput.value = '';
+    newPasswordInput.value = '';
+    confirmPasswordInput.value = '';
+  });
+
+  function showUserSection() {
+    adminSection.style.display = 'none';
+    userSection.style.display = 'block';
+    navAdmin.classList.remove('active');
+    navUser.classList.add('active');
+  }
+
+  function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
+
+  function downloadFile(fileName, base64Data) {
+    const link = document.createElement('a');
+    link.href = base64Data;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  function loadPDFList(subsectionKey) {
+    const raw = localStorage.getItem('ashutosh-pdf-' + subsectionKey);
+    if (!raw) return [];
+    try {
+      return JSON.parse(raw);
+    } catch {
+      return [];
+    }
+  }
+
+  function savePDFList(subsectionKey, list) {
+    localStorage.setItem('ashutosh-pdf-' + subsectionKey, JSON.stringify(list));
+  }
+
+  function renderPDFList(subsectionKey, containerId, isAdmin = false) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    const list = loadPDFList(subsectionKey);
+    container.innerHTML = '';
+    if (list.length === 0) {
+      container.innerHTML = '<em>No PDFs uploaded yet.</em>';
+      return;
+    }
+    list.forEach((pdf, idx) => {
+      const item = document.createElement('div');
+      item.className = 'pdf-list-item';
+
+      const nameSpan = document.createElement('span');
+      nameSpan.className = 'pdf-name';
+      nameSpan.textContent = pdf.name;
+
+      const downloadBtn = document.createElement('button');
+      downloadBtn.className = 'download-single-btn';
+      downloadBtn.textContent = 'Download';
+      downloadBtn.title = 'Download ' + pdf.name;
+      downloadBtn.addEventListener('click', () => {
+        downloadFile(pdf.name, pdf.data);
+      });
+
+      item.appendChild(nameSpan);
+      item.appendChild(downloadBtn);
+
+      if (isAdmin) {
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-btn';
+        removeBtn.textContent = 'Remove';
+        removeBtn.title = 'Remove ' + pdf.name;
+        removeBtn.addEventListener('click', () => {
+          if (confirm(`Are you sure you want to remove "${pdf.name}"?`)) {
+            const newList = list.filter((_, i) => i !== idx);
+            savePDFList(subsectionKey, newList);
+            renderPDFList(subsectionKey, containerId, true);
+            renderPDFList(subsectionKey, 'list-' + subsectionKey);
+          }
+        });
+        item.appendChild(removeBtn);
+      }
+
+      container.appendChild(item);
+    });
+  }
+
+  function initializeUserView() {
+    document.querySelectorAll('#user-section .subsection').forEach(div => {
+      const cls = div.dataset.class;
+      const section = div.dataset.section;
+      if (!cls || !section) return;
+      const key = cls + '-' + section;
+      const containerId = 'list-' + key;
+      renderPDFList(key, containerId);
+    });
+  }
+
+  function initializeAdminUploads() {
+    document.querySelectorAll('#admin-section .subsection').forEach(div => {
+      const cls = div.dataset.class;
+      const section = div.dataset.section;
+      if (!cls || !section) return;
+      const key = cls + '-' + section;
+      const containerId = 'list-admin-' + key;
+      renderPDFList(key, containerId, true);
+      setupAdminUploadButton(div, key);
+    });
+  }
+
+  function setupAdminUploadButton(div, subsectionKey) {
+    const uploadBtn = div.querySelector('.upload-btn');
+    if (!uploadBtn) return;
+    let input = div.querySelector('input[type=file]');
+    if (!input) {
+      input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'application/pdf';
+      input.multiple = true;
+      input.style.display = 'none';
+      div.querySelector('.upload-area').appendChild(input);
+    }
+    input.onchange = null;
+    uploadBtn.onclick = () => input.click();
+    input.onchange = async (e) => {
+      const files = Array.from(e.target.files);
+      if (files.length === 0) return;
+      let list = loadPDFList(subsectionKey);
+      for (const file of files) {
+        if (file.type !== 'application/pdf') {
+          alert(`File "${file.name}" is not a PDF and will be skipped.`);
+          continue;
+        }
+        if (list.some(pdf => pdf.name === file.name)) {
+          alert(`File "${file.name}" already exists and will be skipped.`);
+          continue;
+        }
+        try {
+          const base64 = await fileToBase64(file);
+          list.push({ name: file.name, data: base64 });
+        } catch {
+          alert(`Failed to read file: ${file.name}`);
+        }
+      }
+      savePDFList(subsectionKey, list);
+      renderPDFList(subsectionKey, 'list-admin-' + subsectionKey, true);
+      renderPDFList(subsectionKey, 'list-' + subsectionKey);
+      alert(`Upload complete for ${subsectionKey.replace(/-/g, ' ')}`);
+      input.value = '';
+    };
+  }
+
+  window.addEventListener('DOMContentLoaded', () => {
+    initializeUserView();
+  });
+</script>
+</body>
+</html>
